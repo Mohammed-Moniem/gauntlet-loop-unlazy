@@ -1,0 +1,7 @@
+interface:
+  display_name: "Gauntlet Loop Unlazy"
+  short_description: "Quality-bar gauntlets with runnable gates"
+  brand_color: "#2563EB"
+  default_prompt: "Use $gauntlet-loop-unlazy to run this substantial task against explicit gates, independent critics, and an honest terminal status."
+policy:
+  allow_implicit_invocation: true

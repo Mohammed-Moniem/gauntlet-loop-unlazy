@@ -1,0 +1,13 @@
+{
+  "name": "gauntlet-loop-unlazy-skill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hybrid Codex skill for quality-bar gauntlets with runnable completion gates",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-tests.mjs && node tests/dispatch-tests.mjs && node tests/hardening-tests.mjs && node tests/stress-tests.mjs && node tests/lint-tests.mjs && node tests/contract-tests.mjs && node tests/hybrid-contract-tests.mjs && node tests/self-check.mjs"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
