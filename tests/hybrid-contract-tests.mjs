@@ -116,6 +116,66 @@ test("ledger and plan preserve handoffs, recovery, and contract denominator", ()
   }
 });
 
+test("orchestration launches the whole safe ready wave before waiting", () => {
+  const text = [
+    read("SKILL.md"),
+    read("references/orchestration.md"),
+    read("references/dispatch.md"),
+    read("templates/PLAN.md"),
+  ].join("\n");
+  for (const token of [
+    "Dispatch every safe `READY` leaf in the current wave before waiting on any result",
+    "Do not dispatch one ready leaf, wait for it, and then dispatch its ready siblings",
+    "Ready-wave invariant",
+    "all safe READY leaves launch and are recorded before the first wait/result read",
+    "Rolling Dispatch Rule",
+  ]) {
+    assert.ok(text.includes(token), token);
+  }
+});
+
+test("plan records tiering, ownership, waves, and exact verification targets", () => {
+  const plan = read("templates/PLAN.md");
+  for (const token of [
+    "| ID | Tier | Kind | Needs | OWNS | Dispatch wave | Verification target | Unblocks | State |",
+    ".unlazy/<scope>/gates/leaf-1.1.1.md",
+    "A one-leaf wave is allowed only when no other safe ready leaf exists",
+    "Parent verification targets the exact leaf ledger",
+  ]) {
+    assert.ok(plan.includes(token), token);
+  }
+});
+
+test("leaf verification is narrow and project-wide checks live in branch or root gates", () => {
+  const text = [
+    read("references/orchestration.md"),
+    read("references/gates.md"),
+    read("templates/gates-leaf.md"),
+    read("templates/gates-node.md"),
+    read("README.md"),
+  ].join("\n");
+  for (const token of [
+    "Do not use a bare `gates/*.md` or whole-scope sweep as the parent proof for a single leaf",
+    "Leaf ledgers cover only the outcomes owned by that leaf",
+    "Put cross-leaf behavior, whole-project regressions, end-to-end checks, final packaging",
+    "Whole-project, all-sibling, packaging, and final quality-bar checks belong in",
+    "Reverify returned work with `--reverify` against the exact leaf ledger",
+  ]) {
+    assert.ok(text.includes(token), token);
+  }
+});
+
+test("orchestration adds no hard dependency on model-router or runtime packages", () => {
+  const pkg = JSON.parse(read("package.json"));
+  assert.equal(pkg.dependencies, undefined);
+  assert.equal(pkg.devDependencies, undefined);
+  const text = filesUnder(ROOT)
+    .filter((file) => file.endsWith(".md") || file.endsWith(".yaml") || file.endsWith(".json"))
+    .map((file) => readFileSync(file, "utf8"))
+    .join("\n");
+  assert.equal(text.includes("model-router"), false);
+});
+
 test("every local markdown link resolves", () => {
   const missing = [];
   const link = /\[[^\]]+\]\(([^)]+)\)/g;

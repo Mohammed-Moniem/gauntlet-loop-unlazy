@@ -36,6 +36,12 @@ Scope: import valid records and reject malformed records
 - `OWNS:` paths are repository-relative globs for coordination only. They are not a sandbox.
 - Do not create a zero-gate ledger.
 
+## Leaf And Branch Placement
+
+Leaf ledgers cover only the outcomes owned by that leaf's declared `OWNS:` paths and contract row. They should not contain whole-project, all-sibling, or final acceptance checks unless the leaf truly owns the whole artifact and no orchestrated branch exists.
+
+Put cross-leaf behavior, whole-project regressions, end-to-end checks, final packaging, and quality-bar/threshold integration checks in `node-*.md` branch ledgers or the root `GATES.md`. This keeps parent re-verification narrow: a returned leaf is checked with its exact `gates/leaf-<id>.md`, while branch/root gates run once when their children are ready.
+
 ## Running Gates
 
 Use the local scripts:

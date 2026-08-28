@@ -15,6 +15,7 @@ Decide before fan-out:
 - Dependencies: <leaf ids that must be VERIFIED first>
 - Host launch mode: <Codex native subagents | Claude background agents | sequential fallback>
 - Wave policy: <which independent READY leaves launch together and the maximum host concurrency>
+- Ready-wave invariant: <all safe READY leaves launch and are recorded before the first wait/result read; exceptions require a dependency, ownership conflict, or host concurrency cap>
 - Toolchain: <runtime versions, shell, working-directory rules, test commands>
 - Conventions: <naming, errors, compatibility, formatting>
 - Critic rule: <for example, one fresh integrated critic must select OURS>
@@ -46,6 +47,14 @@ Branch state is exactly one of OPEN, VERIFIED, or ABANDONED.
 
 Use `leaf-` paths for work leaves and `node-` paths for branch integration.
 
+| ID | Tier | Kind | Needs | OWNS | Dispatch wave | Verification target | Unblocks | State |
+|---|---:|---|---|---|---|---|---|---|
+| 1.1.1 | 1 | leaf | - | `src/a/**, tests/a/**` | ready-1 | `.unlazy/<scope>/gates/leaf-1.1.1.md` | 1.1 | READY |
+| 1.1.2 | 1 | leaf | - | `src/b/**, tests/b/**` | ready-1 | `.unlazy/<scope>/gates/leaf-1.1.2.md` | 1.1 | READY |
+| 1.2.2 | 2 | leaf | 1.2.1 | `src/c/**, tests/c/**` | ready-2 | `.unlazy/<scope>/gates/leaf-1.2.2.md` | 1.2 | WAITING |
+
+Every independent `READY` leaf in a tier that fits the host concurrency cap goes into the same dispatch wave after successful claims. A one-leaf wave is allowed only when no other safe ready leaf exists, a dependency has not verified, ownership overlaps, or the host cannot provide more native nonblocking handles.
+
 - 1 <task> .............. GATES.md ..................... State: OPEN
   - 1.1 <branch> ........ gates/node-1.1.md ............ State: OPEN
     - 1.1.1 <leaf> ...... gates/leaf-1.1.1.md .......... Needs: - ...... State: READY
@@ -54,7 +63,7 @@ Use `leaf-` paths for work leaves and `node-` paths for branch integration.
     - 1.2.1 <leaf> ...... gates/leaf-1.2.1.md .......... Needs: - ...... State: READY
     - 1.2.2 <leaf> ...... gates/leaf-1.2.2.md .......... Needs: 1.2.1 .. State: WAITING
 
-Every leaf repeats its complete ownership as an `OWNS:` header in its ledger. Claim each concurrently dispatched leaf with `--claim`, then open and seal a native launch wave as described in `references/dispatch.md` before changing its state to IN-FLIGHT.
+Every leaf repeats its complete ownership as an `OWNS:` header in its ledger. Claim each concurrently dispatched leaf with `--claim`, then open and seal a native launch wave as described in `references/dispatch.md` before changing its state to IN-FLIGHT. Parent verification targets the exact leaf ledger listed above; branch/root gates cover whole-project checks.
 
 ## Status Log
 

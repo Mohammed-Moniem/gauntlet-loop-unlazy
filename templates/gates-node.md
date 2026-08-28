@@ -17,7 +17,7 @@ Scope: integrate children <explicit child ids> into one verified result
   EXPECT: integration verification passed
   EVIDENCE: pending
 
-- [ ] N4: affected sibling behavior has not regressed
+- [ ] N4: whole-project and affected sibling behavior has not regressed
   CHECK: node scripts/verify-regressions.mjs
   EXPECT: regression verification passed
   EVIDENCE: pending
@@ -39,6 +39,8 @@ branch ABANDONED and surface the handoff; never rewrite that result as completio
 
 Branch paths use node-<id>.md. Leaf paths use leaf-<id>.md. Branch completion
 requires integration evidence; a set of locally complete leaves is not enough.
+Whole-project, all-sibling, packaging, and final quality-bar checks belong in
+branch or root ledgers, not leaf ledgers.
 
 For N5, run this once for each direct child after verification and record the
 outputs as manual evidence:

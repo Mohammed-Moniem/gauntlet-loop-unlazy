@@ -56,11 +56,12 @@ The gate checker and optional hook require Node 16 or newer and use no third-par
 3. Write gates before implementation.
 4. Capture baseline evidence.
 5. Split with the Depth Tree only where leaves map to real ownership and integration boundaries.
-6. Work leaves in four passes: implement, expert reread, defect hunt, polish.
-7. Reverify returned work with `--reverify`.
-8. Send verified artifacts to fresh critics.
-9. Integrate bottom-up and rerun gates.
-10. Report exactly one terminal state: `WON`, `PLATEAUED`, `BUDGET-EXHAUSTED`, `BAR-INVALID`, `BLOCKED`, or `STOPPED`.
+6. Launch every safe `READY` leaf in a sealed native dispatch wave before waiting on any result.
+7. Work leaves in four passes: implement, expert reread, defect hunt, polish.
+8. Reverify returned work with `--reverify` against the exact leaf ledger.
+9. Send verified artifacts to fresh critics.
+10. Integrate bottom-up and rerun branch/root gates once for whole-project checks.
+11. Report exactly one terminal state: `WON`, `PLATEAUED`, `BUDGET-EXHAUSTED`, `BAR-INVALID`, `BLOCKED`, or `STOPPED`.
 
 ## Gate Commands
 

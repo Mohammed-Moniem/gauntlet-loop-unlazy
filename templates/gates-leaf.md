@@ -4,6 +4,8 @@ OWNS: <repository-relative globs this leaf may write, for example src/api/**, te
 
 Scope: <one sentence describing the complete deliverable>
 
+Leaf boundary: these gates cover only this leaf's owned deliverable. Put whole-project regressions, all-sibling behavior, packaging, and final quality-bar checks in a `node-*.md` branch ledger or root `GATES.md`.
+
 - [ ] G1: <observable outcome measured directly from the artifact>
   CHECK: node scripts/verify-outcome.mjs
   EXPECT: outcome verification passed
@@ -39,6 +41,9 @@ Strict format:
 - Record exact manual evidence and review consequential manual gates by risk.
 - OWNS paths must be repository-relative, complete, and disjoint from every
   concurrently dispatched leaf. Claims coordinate writers; they do not sandbox.
+- Leaf gates should stay narrow to the leaf's owned files and contract row.
+  Cross-leaf, whole-project, and final acceptance checks belong in node/root
+  ledgers so parent verification can target this exact leaf ledger.
 
 If a gate becomes genuinely impossible, keep the gate and add:
 

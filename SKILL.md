@@ -68,9 +68,9 @@ For orchestration, read [references/method.md](references/method.md), [reference
 3. Write gates before implementation. Every independently required outcome and acceptance-changing constraint needs a gate or explicit handoff.
 4. Capture baseline evidence from the actual artifact or system before changing it.
 5. Build the Depth Tree only where it exposes real ownership, dependency, or integration boundaries. Do not split merely to increase agent count.
-6. Dispatch independent leaves only after exact `OWNS:` paths are disjoint and claimed. Serialize coupled work.
+6. Dispatch every safe `READY` leaf in the current wave before waiting on any result. A safe leaf has verified dependencies, disjoint exact `OWNS:` paths, a successful claim, and a declared verification target. Serialize only coupled or overlapping work.
 7. Work each leaf in four passes: complete implementation, domain reread, defect hunt, and low-cost polish. Stop only after a full improvement pass finds nothing material and gates are met.
-8. Parent-verify returned work with `--reverify`; do not trust old boxes, builder claims, or `--status` as execution.
+8. Parent-verify each returned leaf with `--reverify` against that leaf's exact ledger path, not a bare `gates/*.md` sweep. Dispatch newly unblocked leaves immediately after their dependencies verify; do not wait for unrelated in-flight leaves.
 9. Give a separate critic fresh context containing the artifacts, bar dossier or threshold, comparison dimensions, and gate results. Do not include the builder's rationale, effort, confidence, or requested verdict.
 10. Feed only decisive critic evidence and the highest-leverage remaining gap into the next iteration.
 11. Integrate bottom-up, rerun full gates and regressions, then obtain a whole-artifact critic verdict.

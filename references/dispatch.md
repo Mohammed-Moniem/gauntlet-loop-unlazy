@@ -6,7 +6,7 @@ For one wave, every native launch call and every `start` record must finish befo
 
 ## Open and seal a launch wave
 
-Claim every leaf first. Partition more `READY` leaves into later waves when they exceed the host's current concurrency limit. Then open one wave with the exact ids:
+Claim every leaf first. Partition more `READY` leaves into later waves when they exceed the host's current concurrency limit. Each partition should be as wide as the host can safely accept; never choose a one-leaf wave while another safe ready sibling could be started in the same wave. Then open one wave with the exact ids:
 
 ```text
 node <skill-dir>/scripts/dispatch-check.mjs open --scope <scope> --wave ready-1 --leaf leaf-1.1.1 --leaf leaf-1.1.2
@@ -26,6 +26,8 @@ node <skill-dir>/scripts/dispatch-check.mjs seal --scope <scope> --wave ready-1
 ```
 
 Seal fails until every declared leaf has a distinct start handle. `return` fails before seal. These refusals catch the serial pattern where a driver launches one leaf, waits for it, and only then launches the next.
+
+After a returned leaf verifies, newly unblocked leaves enter the next ready wave immediately. The driver does not wait for unrelated in-flight leaves unless their results are dependencies for that next wave.
 
 When a native agent finishes, record the return before parent re-verification:
 
