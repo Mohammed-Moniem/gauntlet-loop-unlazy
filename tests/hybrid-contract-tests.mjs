@@ -53,7 +53,7 @@ test("package: required public skill files exist", () => {
 
 test("frontmatter and UI metadata route to the hybrid skill", () => {
   const skill = read("SKILL.md");
-  assert.match(skill, /^---\n[\s\S]*name: gauntlet-loop-unlazy[\s\S]*---/);
+  assert.match(skill, /^---\r?\n[\s\S]*name: gauntlet-loop-unlazy[\s\S]*---/);
   assert.match(skill, /Use when/);
   assert.match(skill, /do not use/);
   assert.match(skill, /Passing gates alone is not `WON`/);
