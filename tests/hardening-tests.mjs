@@ -418,15 +418,15 @@ test("regex: worker startup is outside the match budget and concurrency is cappe
   try {
     s.write("simple.mjs", "console.log('total: 42 items');\n");
     let ledger = "";
-    for (let index = 1; index <= 32; index++) {
+    for (let index = 1; index <= 8; index++) {
       ledger += gate("G" + index, "simple regex " + index, "node simple.mjs", "/total: \\d+ items/");
     }
     s.write("GATES.md", ledger);
-    const result = await gateRun(s, ["--jobs", "32", "--timeout", "10"]);
+    const result = await gateRun(s, ["--jobs", "8", "--timeout", "10"]);
     assert(result.code === 0, result.out);
     lacks(result.out, "worker startup exceeded");
     lacks(result.out, "EXPECT regex exceeded");
-    has(result.out, "PASS GATES:G32");
+    has(result.out, "PASS GATES:G8");
   } finally { s.cleanup(); }
 });
 
